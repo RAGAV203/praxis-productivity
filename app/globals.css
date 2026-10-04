@@ -1,0 +1,134 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------- Tokens (light first, dark overrides) ---------- */
+:root {
+  --accent: #0a84ff;
+  --bg: #f2f2f7;
+  --fg: #1c1c1e;
+  --muted: #6e6e73;
+  --faint: #aeaeb2;
+  --glass: rgba(255, 255, 255, 0.62);
+  --glass-strong: rgba(255, 255, 255, 0.82);
+  --glass-border: rgba(255, 255, 255, 0.75);
+  --hairline: rgba(60, 60, 67, 0.12);
+  --shadow: 0 8px 30px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.06);
+  --blob-a: #c7d7ff;
+  --blob-b: #ffd6e8;
+  --blob-c: #d4f7e7;
+  --good: #30d158;
+  --warn: #ff9f0a;
+  --bad: #ff453a;
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #000000;
+  --fg: #f5f5f7;
+  --muted: #98989f;
+  --faint: #636366;
+  --glass: rgba(44, 44, 46, 0.55);
+  --glass-strong: rgba(44, 44, 46, 0.82);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --hairline: rgba(255, 255, 255, 0.1);
+  --shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+  --blob-a: #22357a;
+  --blob-b: #5a1d50;
+  --blob-c: #0f4a3f;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-accent: var(--accent);
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-hairline: var(--hairline);
+  --color-good: var(--good);
+  --color-warn: var(--warn);
+  --color-bad: var(--bad);
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI Variable", "Segoe UI", Inter, Roboto, system-ui, sans-serif;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+/* ---------- Animated wallpaper ---------- */
+.wallpaper {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: var(--bg);
+}
+.wallpaper i {
+  position: absolute;
+  width: 60vmax;
+  height: 60vmax;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.55;
+  animation: drift 28s ease-in-out infinite alternate;
+}
+.wallpaper i:nth-child(1) { background: var(--blob-a); top: -20vmax; left: -15vmax; }
+.wallpaper i:nth-child(2) { background: var(--blob-b); bottom: -25vmax; right: -20vmax; animation-delay: -9s; }
+.wallpaper i:nth-child(3) { background: var(--blob-c); top: 30%; left: 40%; width: 40vmax; height: 40vmax; animation-delay: -17s; }
+.dark .wallpaper i { opacity: 0.7; }
+@keyframes drift {
+  to { transform: translate(6vmax, 4vmax) scale(1.12); }
+}
+
+/* ---------- Liquid glass ---------- */
+.glass {
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+.glass-strong {
+  background: var(--glass-strong);
+  -webkit-backdrop-filter: blur(30px) saturate(200%);
+  backdrop-filter: blur(30px) saturate(200%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.dark .glass,
+.dark .glass-strong {
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+.pt-safe { padding-top: env(safe-area-inset-top, 0px); }
+
+/* Inputs */
+.field {
+  width: 100%;
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: var(--hairline);
+  outline: none;
+  font-size: 16px; /* prevents iOS zoom */
+  transition: box-shadow 0.2s, background 0.2s;
+}
+.field:focus {
+  box-shadow: 0 0 0 2px var(--accent);
+  background: transparent;
+}
+.field::placeholder { color: var(--faint); }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .wallpaper i { animation: none; }
+}
